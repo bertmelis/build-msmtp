@@ -9,12 +9,11 @@ fi
 mkdir artifacts
 chmod 777 artifacts
 
-# First build a docker image that contains the sources and necessary packages for rpmbuild
+# First build a image that contains the sources and necessary packages for rpmbuild
 podman build -t ${PACKAGE_TO_BUILD}-build .
 
-# then run the docker image
+# then run the image
 if [ -z $WORKSPACE ] ; then
-  # we are not being called from within jenkins
   WORKSPACE=$(pwd)
 fi
 podman run --rm -e PACKAGE=${PACKAGE_TO_BUILD} -v ${WORKSPACE}/artifacts:/artifacts:Z ${PACKAGE_TO_BUILD}-build /rpmbuild/build_rpm.bash
